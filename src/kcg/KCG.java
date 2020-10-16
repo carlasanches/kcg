@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package pmc;
+package kcg;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,14 +12,14 @@ import java.util.List;
  *
  * @author Carla
  */
-public class PMC {
+public class KCG {
 
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
         // TODO code application logic here
-        
+                
         Item item1 = new Item(10,3);
         Item item2 = new Item(8,4);
         Item item3 = new Item(4,4);
