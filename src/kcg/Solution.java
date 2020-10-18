@@ -5,6 +5,7 @@
  */
 package kcg;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -13,11 +14,55 @@ import java.util.List;
  */
 public class Solution {
     
-    private List<Item> items;
-    private int value;
+    private List<Integer> items;
+    private int profit;
+    private int weight;
+
+    public Solution(int size) {
+        this.items = new ArrayList(size);
+        this.profit = 0;
+        this.weight = 0;
+    }
+    
+    public List<Integer> getItems() {
+        return items;
+    }
+
+    public void setItems(List<Integer> items) {
+        this.items = items;
+    }
+
+    public int getProfit() {
+        return profit;
+    }
+
+    public void setProfit(int profit) {
+        this.profit = profit;
+    }
+
+    public int getWeight() {
+        return weight;
+    }
+
+    public void setWeight(int weight) {
+        this.weight = weight;
+    }
+    
+    public void printItems(){
+        
+        System.out.print("S = {");
+        
+        for(Integer item : this.items){
+            System.out.print(item + ", ");
+        }
+        
+        System.out.println("}");
+    }
 
     @Override
     public String toString() {
-        return "Solution{" + "items=" + items + ", value=" + value + '}';
-    } 
+        return "Solution{" + "profit=" + profit + ", weight=" + weight + '}';
+    }
+    
+    
 }

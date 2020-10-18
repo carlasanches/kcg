@@ -12,11 +12,11 @@ package kcg;
 public class Item {
     
     private int weight;
-    private int value;
+    private int profit;
 
-    public Item(int weight, int value) {
+    public Item(int profit, int weight) {
         this.weight = weight;
-        this.value = value;
+        this.profit = profit;
     }
 
     /**
@@ -34,21 +34,21 @@ public class Item {
     }
 
     /**
-     * @return the value
+     * @return the profit
      */
-    public int getValue() {
-        return value;
+    public int getProfit() {
+        return profit;
     }
 
     /**
-     * @param value the value to set
+     * @param profit the profit to set
      */
-    public void setValue(int value) {
-        this.value = value;
+    public void setProfit(int profit) {
+        this.profit = profit;
     }    
 
     @Override
     public String toString() {
-        return "Item{" + "weight=" + weight + ", value=" + value + '}';
+        return "Item{" + "weight=" + weight + ", value=" + profit + '}';
     }
 }
