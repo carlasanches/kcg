@@ -13,10 +13,59 @@ import java.util.List;
  * @author Carla
  */
 public class KCG {
-
-    /**
-     * @param args the command line arguments
-     */
+    
+    public static Solution greedy(Solution partialSolution, Solution solution, List<Item> items, Item item,int capacity){
+        
+        if(partialSolution.getWeight() + item.getWeight() > capacity){ //complete solution
+            
+            if(partialSolution.getProfit() > solution.getProfit()){ //upper bound
+                solution.setProfit(partialSolution.getProfit());
+            }            
+            solution = partialSolution;
+        }    
+        else{
+            if(!partialSolution.getItems().contains(item)){
+                partialSolution.getItems().add(item);
+                partialSolution.setProfit(partialSolution.getProfit() + item.getProfit());
+                partialSolution.setWeight(partialSolution.getWeight()+ item.getWeight());
+                search(partialSolution, solution, items, items.get(items.indexOf(item) + 1), capacity);
+            }                
+        }
+        
+        return solution;
+    }
+    
+    public static Solution search(Solution partialSolution, Solution solution, List<Item> items, Item item,int capacity){
+        
+        if(partialSolution.getWeight() + item.getWeight() > capacity){ //complete solution
+            
+            if(partialSolution.getProfit() > solution.getProfit()){ //upper bound
+                solution.setProfit(partialSolution.getProfit());
+                solution.setWeight(partialSolution.getWeight());
+                solution.setItems(partialSolution.getItems());
+            }
+        }    
+        else{   
+            partialSolution.getItems().add(item);
+            partialSolution.setProfit(partialSolution.getProfit() + item.getProfit());
+            partialSolution.setWeight(partialSolution.getWeight() + item.getWeight());
+            
+            search(partialSolution, solution, items, items.get(items.indexOf(item)+1), capacity);
+        }
+        
+        return solution;
+    }
+        
+    public static void branchAndBound(List<Item> items, int capacity, Solution partialSolution){
+        
+        Solution solution = new Solution(capacity);
+        
+        for(Item item : items){
+            solution = search(partialSolution, solution, items, item, capacity);
+        }
+        
+        System.out.println("BB: " + solution.toString());
+    }
     
     public static double upperBound(int currentWeight, int currentValue, int k, int capacity, List<Item> items){
         int weight = currentWeight;
@@ -33,8 +82,8 @@ public class KCG {
     }
     
     public static void backtracking(int capacity, List<Item> items){
-        Solution partialSolution = new Solution(capacity);
-        Solution finalSolution = new Solution(capacity);
+        Solution1 partialSolution = new Solution1(capacity);
+        Solution1 finalSolution = new Solution1(capacity);
         int currentWeight = 0;
         int currentProfit = 0;
         int finalProfit = 0;
@@ -83,12 +132,16 @@ public class KCG {
                 currentWeight -= items.get(k).getWeight();
                 currentProfit -= items.get(k).getProfit();
                 
-                System.out.println("Partial S: ");
+                System.out.println("****Partial S: ");
                 partialSolution.printItems();
             }
             k++;
         }
     }
+    
+    /**
+    * @param args the command line arguments
+    */
     
     public static void main(String[] args) {
         // TODO code application logic here
@@ -114,6 +167,9 @@ public class KCG {
 
         itens.forEach((item)->System.out.println(item.toString()));
         
-        backtracking(15,itens);
+        Solution solution = new Solution(15);
+        branchAndBound(itens,15,solution);
+        backtracking(15, itens);
+        
     }    
 }

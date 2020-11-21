@@ -11,10 +11,10 @@ package kcg;
  */
 public class Item {
     
-    private int weight;
-    private int profit;
+    private double weight;
+    private double profit;
 
-    public Item(int profit, int weight) {
+    public Item(double profit, double weight) {
         this.weight = weight;
         this.profit = profit;
     }
@@ -22,28 +22,28 @@ public class Item {
     /**
      * @return the weight
      */
-    public int getWeight() {
+    public double getWeight() {
         return weight;
     }
 
     /**
      * @param weight the weight to set
      */
-    public void setWeight(int weight) {
+    public void setWeight(double weight) {
         this.weight = weight;
     }
 
     /**
      * @return the profit
      */
-    public int getProfit() {
+    public double getProfit() {
         return profit;
     }
 
     /**
      * @param profit the profit to set
      */
-    public void setProfit(int profit) {
+    public void setProfit(double profit) {
         this.profit = profit;
     }    
 

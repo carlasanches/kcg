@@ -12,23 +12,23 @@ import java.util.List;
  *
  * @author Carla
  */
-public class Solution {
+public class Solution1 {
     
-    private List<Item> items;
+    private List<Integer> items;
     private double profit;
     private double weight;
 
-    public Solution(int size) {
+    public Solution1(int size) {
         this.items = new ArrayList(size);
         this.profit = 0;
         this.weight = 0;
     }
     
-    public List<Item> getItems() {
+    public List<Integer> getItems() {
         return items;
     }
 
-    public void setItems(List<Item> items) {
+    public void setItems(List<Integer> items) {
         this.items = items;
     }
 
@@ -52,7 +52,7 @@ public class Solution {
         
         System.out.print("S = {");
         
-        for(Item item : this.items){
+        for(Integer item : this.items){
             System.out.print(item + ", ");
         }
         
