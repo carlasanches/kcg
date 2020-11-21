@@ -36,7 +36,7 @@ public class KCG {
     }
     
     public static Solution search(Solution partialSolution, Solution solution, List<Item> items, Item item,int capacity){
-        
+                
         if(partialSolution.getWeight() + item.getWeight() > capacity){ //complete solution
             
             if(partialSolution.getProfit() > solution.getProfit()){ //upper bound
@@ -50,7 +50,7 @@ public class KCG {
             partialSolution.setProfit(partialSolution.getProfit() + item.getProfit());
             partialSolution.setWeight(partialSolution.getWeight() + item.getWeight());
             
-            search(partialSolution, solution, items, items.get(items.indexOf(item)+1), capacity);
+            search(partialSolution, solution, items, items.get(items.indexOf(item)+1), capacity);            
         }
         
         return solution;
@@ -60,11 +60,15 @@ public class KCG {
         
         Solution solution = new Solution(capacity);
         
+        //add itens restantes
         for(Item item : items){
-            solution = search(partialSolution, solution, items, item, capacity);
+            if(!solution.getItems().contains(item)){
+                solution = search(partialSolution, solution, items, item, capacity);
+            }            
         }
         
         System.out.println("BB: " + solution.toString());
+        System.out.println("sol: " + solution.getItems().toString());
     }
     
     public static double upperBound(int currentWeight, int currentValue, int k, int capacity, List<Item> items){
