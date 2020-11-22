@@ -5,8 +5,11 @@
  */
 package kcg;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -62,6 +65,14 @@ public class KCG1 {
     
     public static void main(String[] args) {
         // TODO code application logic here
+        
+        String path = "instances/n50c36dc0.64.knpc";
+        
+        try {
+            KNPCFile.reader(path);
+        } catch (IOException ex) {
+            Logger.getLogger(KCG1.class.getName()).log(Level.SEVERE, null, ex);
+        }
                 
         Item item1 = new Item(10,3);
         Item item2 = new Item(8,4);
