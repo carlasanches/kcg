@@ -5,11 +5,8 @@
  */
 package kcg;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -17,46 +14,133 @@ import java.util.logging.Logger;
  */
 public class KCG1 {
     
-    static int bound = Integer.MIN_VALUE;
-    static int solutionBound = 0;
-    static int solutionWeight = 0;
-    static List<Integer> finalSol = new ArrayList();       
+    public static Solution greedy(Solution partialSolution, Solution solution, List<Item> items, Item item,int capacity){
+        
+        if(partialSolution.getWeight() + item.getWeight() > capacity){ //complete solution
+            
+            if(partialSolution.getProfit() > solution.getProfit()){ //upper bound
+                solution.setProfit(partialSolution.getProfit());
+            }            
+            solution = partialSolution;
+        }    
+        else{
+            if(!partialSolution.getItems().contains(item)){
+                partialSolution.getItems().add(item);
+                partialSolution.setProfit(partialSolution.getProfit() + item.getProfit());
+                partialSolution.setWeight(partialSolution.getWeight()+ item.getWeight());
+                search(partialSolution, solution, items, items.get(items.indexOf(item) + 1), capacity);
+            }                
+        }
+        
+        return solution;
+    }
     
-    public static List<Integer> search(List<Integer> solution, List<Item> items, int index, int[][] A){
+    public static Solution search(Solution partialSolution, Solution solution, List<Item> items, Item item,int capacity){
+                
+        if(partialSolution.getWeight() + item.getWeight() > capacity){ //complete solution
+            
+            if(partialSolution.getProfit() > solution.getProfit()){ //upper bound
+                solution.setProfit(partialSolution.getProfit());
+                solution.setWeight(partialSolution.getWeight());
+                solution.setItems(partialSolution.getItems());
+            }
+        }    
+        else{   
+            partialSolution.getItems().add(item);
+            partialSolution.setProfit(partialSolution.getProfit() + item.getProfit());
+            partialSolution.setWeight(partialSolution.getWeight() + item.getWeight());
+            
+            search(partialSolution, solution, items, items.get(items.indexOf(item)+1), capacity);            
+        }
         
-        boolean conflict = true;
+        return solution;
+    }
         
-        if(solutionBound > bound){
-            if((index+1) < items.size()){
-                if(solutionWeight <= 15 && solutionWeight + items.get(index+1).getWeight() > 15){
-                    bound = solutionBound;
-                    finalSol.clear();
-                    finalSol.addAll(solution);
+    public static void branchAndBound(List<Item> items, int capacity, Solution partialSolution){
+        
+        Solution solution = new Solution(capacity);
+        
+        //add itens restantes
+        for(Item item : items){
+            if(!solution.getItems().contains(item)){
+                solution = search(partialSolution, solution, items, item, capacity);
+            }            
+        }
+        
+        System.out.println("BB: " + solution.toString());
+        System.out.println("sol: " + solution.getItems().toString());
+    }
+    
+    public static double upperBound(int currentWeight, int currentValue, int k, int capacity, List<Item> items){
+        int weight = currentWeight;
+        int profit = currentValue;
+        
+        for(int i = k+1; i < items.size(); i++){ 
+            weight += items.get(i).getWeight();
+            if(weight < capacity){
+                profit += items.get(i).getProfit();
+            }
+            else return profit;
+        }
+        return profit;
+    }
+    
+    public static void backtracking(int capacity, List<Item> items){
+        Solution1 partialSolution = new Solution1(capacity);
+        Solution1 finalSolution = new Solution1(capacity);
+        int currentWeight = 0;
+        int currentProfit = 0;
+        int finalProfit = 0;
+        int k = 0; //k is the current position of the item
+        
+        while(true){
+            while(k < items.size() && (currentWeight + items.get(k).getWeight()) <= capacity){
+                currentWeight += items.get(k).getWeight();
+                currentProfit += items.get(k).getProfit();
+                partialSolution.getItems().add(k,1);
+                partialSolution.setProfit(currentProfit);
+                partialSolution.setWeight(currentWeight);
+                k++;
+            }
+            
+            System.out.println("Partial S: ");
+            partialSolution.printItems();
+
+            if(k == items.size()){
+                finalProfit = currentProfit;
+                k = items.size() - 1;
+                
+                finalSolution.getItems().clear();
+                finalSolution.getItems().addAll(partialSolution.getItems());
+                finalSolution.setProfit(finalProfit);
+                finalSolution.setWeight(currentWeight);
+                
+                System.out.println("Final S:");
+                finalSolution.printItems();
+            }
+            else{
+                partialSolution.getItems().add(k,0);
+            }
+
+            while(upperBound(currentWeight, currentProfit, k, capacity, items) <= finalProfit){
+                
+                while(k != 0 && partialSolution.getItems().get(k) != 1){
+                    k--;
                 }
-                else{
-                    
-                    while(conflict){
-                        index++;
-                        
-                        for(Integer i : solution){
-                            if(A[index][i] != 1 && A[i][index] != 1){
-                               conflict = false;
-                               break;
-                            }
-                        }   
-                    }
-                                        
-                    if(!solution.contains(index)){ 
-                        solutionBound += items.get(index).getProfit();
-                        solutionWeight += items.get(index).getWeight();
-                        solution.add(index);
-                        search(solution,items,index,A); 
-                    } 
+                if(k == 0){
+                    finalSolution.printItems();
+                    System.out.println(finalSolution.toString());
+                    return;
                 }
-            }                               
-        }      
-        
-        return finalSol;
+                partialSolution.getItems().set(k, 0);
+                currentWeight -= items.get(k).getWeight();
+                currentProfit -= items.get(k).getProfit();
+                
+                System.out.println("****Partial S: ");
+                partialSolution.printItems();
+            }
+            k++;
+        }
     }
     
     /**
@@ -65,14 +149,6 @@ public class KCG1 {
     
     public static void main(String[] args) {
         // TODO code application logic here
-        
-        String path = "instances/n50c36dc0.64.knpc";
-        
-        try {
-            KNPCFile.reader(path);
-        } catch (IOException ex) {
-            Logger.getLogger(KCG1.class.getName()).log(Level.SEVERE, null, ex);
-        }
                 
         Item item1 = new Item(10,3);
         Item item2 = new Item(8,4);
@@ -95,61 +171,9 @@ public class KCG1 {
 
         itens.forEach((item)->System.out.println(item.toString()));
         
-        int[][] A = new int[12][12];
+        Solution solution = new Solution(15);
+        branchAndBound(itens,15,solution);
+        backtracking(15, itens);
         
-        for(int i = 0; i < 12; i++){
-            for(int j = 0; j < 12; j ++){
-                A[i][j] = 0;
-            }
-        }
-        
-        A[1][4] = 1;
-        A[2][4] = 1;
-        A[2][5] = 1;
-        A[2][7] = 1;
-        A[4][7] = 1;
-        A[4][8] = 1;
-        A[5][6] = 1;
-        A[5][7] = 1;
-        A[5][8] = 1;
-        A[6][7] = 1;
-        A[6][8] = 1;
-        A[7][8] = 1;
-        
-        List<Integer> solution = new ArrayList();
-        boolean conflict = false;
-        
-        for(int i = 0; i < itens.size(); i++){
-            for(Integer index : solution){
-                if(A[index][i] == 1 && A[i][index] == 1){
-                    conflict = true;
-                    break;
-                }
-            }
-            
-            if(conflict) continue;
-            
-            if(!solution.contains(i)){   
-                                
-                solution.add(i);
-                solutionBound += itens.get(i).getProfit();
-                solutionWeight += itens.get(i).getWeight();
-                
-                search(solution, itens, i, A);  
-                
-                conflict = false;
-                System.out.println(solution.toString());
-                                
-                if(solution.size() > 0){
-                    solutionBound -= itens.get(solution.get(solution.size()-1)).getProfit();
-                    solutionWeight -= itens.get(solution.get(solution.size()-1)).getWeight();
-                    solution.remove(solution.size()-1);                      
-                }
-                System.out.println(solution.toString());
-            }            
-        }
-                       
-        System.out.println(finalSol.toString());  
-        System.out.println(bound);
     }    
 }
