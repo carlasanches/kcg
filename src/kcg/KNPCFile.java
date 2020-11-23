@@ -45,7 +45,7 @@ public class KNPCFile {
     public static void writer(String path, String line) throws IOException{
         
         if(!new File(path).exists()){
-            new File(path).mkdir();
+            new File(path).createNewFile();
         }
         
         try (BufferedWriter buffWrite = new BufferedWriter(new FileWriter(path))) {

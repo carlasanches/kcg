@@ -73,7 +73,7 @@ public class Main {
             List<String> text = new ArrayList();
 
             try {
-                text = KNPCFile.reader(inPath);
+                text.addAll(KNPCFile.reader(inPath));
             } catch (IOException ex) {
                 Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
             }
