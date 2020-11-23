@@ -102,19 +102,14 @@ public class Main {
                     search(solution, kcg.getItems(), i, kcg.getConflict());  
 
                     conflict = false;
-                    System.out.println(solution.toString());
 
                     if(solution.size() > 0){
                         solutionBound -= kcg.getItems().get(solution.get(solution.size()-1)).getProfit();
                         solutionWeight -= kcg.getItems().get(solution.get(solution.size()-1)).getWeight();
                         solution.remove(solution.size()-1);                      
                     }
-                    System.out.println(solution.toString());
                 }            
             }
-
-            System.out.println(finalSol.toString());  
-            System.out.println(bound);
 
             String totalItems = "";
 
