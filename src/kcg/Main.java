@@ -66,92 +66,69 @@ public class Main {
     public static void main(String[] args) {
         // TODO code application logic here
         
-        String inPath = args[0];
-        String outPath = args[1];
+        if(args.length == 2){
+            String inPath = args[0];
+            String outPath = args[1];
 
-        
-        try {
-            KNPCFile.reader(inPath);
-        } catch (IOException ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-        }
-                
-        Item item1 = new Item(10,3);
-        Item item2 = new Item(8,4);
-        Item item3 = new Item(4,4);
-        Item item4 = new Item(6,5);
-        Item item5 = new Item(8,7);
-        Item item6 = new Item(6,9);
-        Item item7 = new Item(9,9);
-        Item item8 = new Item(6,10);
-        
-        List<Item> itens = new ArrayList();   
-        itens.add(item1);
-        itens.add(item2);
-        itens.add(item3);
-        itens.add(item4);
-        itens.add(item5);
-        itens.add(item6);
-        itens.add(item7);
-        itens.add(item8);
+            List<String> text = new ArrayList();
 
-        itens.forEach((item)->System.out.println(item.toString()));
-        
-        int[][] A = new int[12][12];
-        
-        for(int i = 0; i < 12; i++){
-            for(int j = 0; j < 12; j ++){
-                A[i][j] = 0;
+            try {
+                text = KNPCFile.reader(inPath);
+            } catch (IOException ex) {
+                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }
-        
-        A[1][4] = 1;
-        A[2][4] = 1;
-        A[2][5] = 1;
-        A[2][7] = 1;
-        A[4][7] = 1;
-        A[4][8] = 1;
-        A[5][6] = 1;
-        A[5][7] = 1;
-        A[5][8] = 1;
-        A[6][7] = 1;
-        A[6][8] = 1;
-        A[7][8] = 1;
-        
-        List<Integer> solution = new ArrayList();
-        boolean conflict = false;
-        
-        for(int i = 0; i < itens.size(); i++){
-            for(Integer index : solution){
-                if(A[index][i] == 1 && A[i][index] == 1){
-                    conflict = true;
-                    break;
+
+            KCG kcg = KNPCFile.format(text);    
+
+            List<Integer> solution = new ArrayList();
+            boolean conflict = false;
+
+            for(int i = 0; i < kcg.getItems().size(); i++){
+                for(Integer index : solution){
+                    if(kcg.getConflict()[index][i] == 1 && kcg.getConflict()[i][index] == 1){
+                        conflict = true;
+                        break;
+                    }
                 }
+
+                if(conflict) continue;
+
+                if(!solution.contains(i)){   
+
+                    solution.add(i);
+                    solutionBound += kcg.getItems().get(i).getProfit();
+                    solutionWeight += kcg.getItems().get(i).getWeight();
+
+                    search(solution, kcg.getItems(), i, kcg.getConflict());  
+
+                    conflict = false;
+                    System.out.println(solution.toString());
+
+                    if(solution.size() > 0){
+                        solutionBound -= kcg.getItems().get(solution.get(solution.size()-1)).getProfit();
+                        solutionWeight -= kcg.getItems().get(solution.get(solution.size()-1)).getWeight();
+                        solution.remove(solution.size()-1);                      
+                    }
+                    System.out.println(solution.toString());
+                }            
             }
-            
-            if(conflict) continue;
-            
-            if(!solution.contains(i)){   
-                                
-                solution.add(i);
-                solutionBound += itens.get(i).getProfit();
-                solutionWeight += itens.get(i).getWeight();
-                
-                search(solution, itens, i, A);  
-                
-                conflict = false;
-                System.out.println(solution.toString());
-                                
-                if(solution.size() > 0){
-                    solutionBound -= itens.get(solution.get(solution.size()-1)).getProfit();
-                    solutionWeight -= itens.get(solution.get(solution.size()-1)).getWeight();
-                    solution.remove(solution.size()-1);                      
-                }
-                System.out.println(solution.toString());
-            }            
-        }
-                       
-        System.out.println(finalSol.toString());  
-        System.out.println(bound);
+
+            System.out.println(finalSol.toString());  
+            System.out.println(bound);
+
+            String totalItems = "";
+
+            for(Integer i : finalSol){
+                totalItems += " " + i.toString();
+            }
+
+            String write = bound + " " + finalSol.size() + totalItems + " ";
+
+            try {
+                KNPCFile.writer(outPath, write);
+            } catch (IOException ex) {
+                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }  
     }    
 }

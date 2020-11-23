@@ -16,20 +16,13 @@ public class KCG {
     private int capacity;
     private int numItems;
     private List<Item> items;
-    private int numConflict;
     private int conflict[][];
 
-    public KCG(int capacity, List<Item> items, int numConflict) {
+    public KCG(int capacity, List<Item> items, int conflict[][]) {
         this.capacity = capacity;        
         this.items = items;
         this.numItems = items.size();
-        this.numConflict = numConflict;
-        
-        for(int i = 0; i < numConflict; i++){
-            for(int j = 0; j < numConflict; j++){
-                this.conflict[i][j] = 0;
-            }
-        }
+        this.conflict = conflict;
     }
 
     public int getCapacity() {
@@ -40,9 +33,6 @@ public class KCG {
         return items;
     }
 
-    public int getNumConflict() {
-        return numConflict;
-    }
 
     public int[][] getConflict() {
         return conflict;
@@ -50,5 +40,21 @@ public class KCG {
 
     public int getNumItems() {
         return numItems;
+    }    
+    
+    public void printConflict(){
+        
+        double numConflict = conflict.length;
+        
+        for(int x = 0; x < numConflict; x++){
+            for(int y = 0; y < numConflict; y++){
+                System.out.println("["+x+"]"+"["+y+"]"+ conflict[x][y]);                             
+            }
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "KCG{" + "capacity=" + capacity + ", numItems=" + numItems + ", items=" + items;
     }    
 }

@@ -147,7 +147,7 @@ public class KCG1 {
     * @param args the command line arguments
     */
     
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
         // TODO code application logic here
                 
         Item item1 = new Item(10,3);
@@ -175,5 +175,5 @@ public class KCG1 {
         branchAndBound(itens,15,solution);
         backtracking(15, itens);
         
-    }    
+    }  */  
 }
