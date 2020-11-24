@@ -7,6 +7,7 @@ package kcg;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
 
 /**
  *
@@ -14,6 +15,10 @@ import java.util.List;
  */
 public class KCG1 {
     
+<<<<<<< HEAD
+    /*    
+       
+=======
     public static Solution greedy(Solution partialSolution, Solution solution, List<Item> items, Item item,int capacity){
         
         if(partialSolution.getWeight() + item.getWeight() > capacity){ //complete solution
@@ -71,6 +76,7 @@ public class KCG1 {
         System.out.println("sol: " + solution.getItems().toString());
     }
     
+>>>>>>> parent of 8de4d34 (nova classe Solver)
     public static double upperBound(int currentWeight, int currentValue, int k, int capacity, List<Item> items){
         int weight = currentWeight;
         int profit = currentValue;

@@ -15,8 +15,8 @@ import java.util.List;
 public class Solution {
     
     private List<Item> items;
-    private double profit;
-    private double weight;
+    private int profit;
+    private int weight;
 
     public Solution(int size) {
         this.items = new ArrayList(size);
@@ -32,19 +32,19 @@ public class Solution {
         this.items = items;
     }
 
-    public double getProfit() {
+    public int getProfit() {
         return profit;
     }
 
-    public void setProfit(double profit) {
+    public void setProfit(int profit) {
         this.profit = profit;
     }
 
-    public double getWeight() {
+    public int getWeight() {
         return weight;
     }
 
-    public void setWeight(double weight) {
+    public void setWeight(int weight) {
         this.weight = weight;
     }
     

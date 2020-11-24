@@ -8,6 +8,8 @@ package kcg;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -18,6 +20,10 @@ import java.util.logging.Logger;
 public class Main {
     
     static int bound = Integer.MIN_VALUE;
+<<<<<<< HEAD
+    static List<Integer> finalSol = new ArrayList();    
+    Timer timer;
+=======
     static int solutionBound = 0;
     static int solutionWeight = 0;
     static List<Integer> finalSol = new ArrayList();       
@@ -58,15 +64,30 @@ public class Main {
         
         return finalSol;
     }
+>>>>>>> parent of 8de4d34 (nova classe Solver)
     
     /**
     * @param args the command line arguments
     */
     
+    public Main(int seconds) {
+        timer = new Timer();
+        timer.schedule(new RemindTask(), seconds*1000);
+    }
+    
+    class RemindTask extends TimerTask {
+        public void run() {
+            System.out.println("Time's up!");
+            System.exit(0);   // Stops the AWT thread
+                              // (and everything else)
+        }
+    }
+    
     public static void main(String[] args) {
         // TODO code application logic here
-        
-        if(args.length == 2){
+        //new Main(763);
+                
+        if(args.length >= 2){
             String inPath = args[0];
             String outPath = args[1];
 
@@ -78,6 +99,13 @@ public class Main {
                 Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
             }
 
+<<<<<<< HEAD
+            KCG kcg = KNPCFile.format(text);   
+            
+            //Solution finalSolution = Solver.branchAndBound(kcg);            
+            //Solution finalSolution = Solver.greedy(kcg);
+            Solution finalSolution = Solver.relaxedGreedy(kcg);
+=======
             KCG kcg = KNPCFile.format(text);    
 
             List<Integer> solution = new ArrayList();
@@ -102,33 +130,30 @@ public class Main {
                     search(solution, kcg.getItems(), i, kcg.getConflict());  
 
                     conflict = false;
-                    System.out.println(solution.toString());
 
                     if(solution.size() > 0){
                         solutionBound -= kcg.getItems().get(solution.get(solution.size()-1)).getProfit();
                         solutionWeight -= kcg.getItems().get(solution.get(solution.size()-1)).getWeight();
                         solution.remove(solution.size()-1);                      
                     }
-                    System.out.println(solution.toString());
                 }            
             }
-
-            System.out.println(finalSol.toString());  
-            System.out.println(bound);
+>>>>>>> parent of 8de4d34 (nova classe Solver)
 
             String totalItems = "";
 
-            for(Integer i : finalSol){
-                totalItems += " " + i.toString();
+            for(Item i : finalSolution.getItems()){
+                totalItems += " " + (finalSolution.getItems().indexOf(i)+1);
             }
-
-            String write = bound + " " + finalSol.size() + totalItems + " ";
+            
+            //arquivo contendo lucro, total de itens e listagem de itens
+            String write = finalSolution.getProfit() + " " + finalSolution.getItems().size() + totalItems + " ";
 
             try {
                 KNPCFile.writer(outPath, write);
             } catch (IOException ex) {
                 Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }  
+        }
     }    
 }
