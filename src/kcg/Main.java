@@ -58,9 +58,9 @@ public class Main {
 
             KCG kcg = KNPCFile.format(text);   
             
-            //Solution finalSolution = Solver.branchAndBound(kcg);            
+            Solution finalSolution = Solver.branchAndBound(kcg);            
             //Solution finalSolution = Solver.greedy(kcg);
-            Solution finalSolution = Solver.relaxedGreedy(kcg);
+           //Solution finalSolution = Solver.relaxedGreedy(kcg);
 
             String totalItems = "";
 

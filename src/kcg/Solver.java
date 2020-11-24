@@ -132,29 +132,39 @@ public class Solver {
     }
     
     public static Solution relaxedUpperBound(Solution partialSolution, Solution finalSolution, int capacity, List<Item> items, int index, int[][] A){
-        
+                
         boolean conflict = true;
         
         if(partialSolution.getProfit() > finalSolution.getProfit()){
             if((index+1) < items.size()){
                 if(partialSolution.getWeight() > capacity){
                     
-                    int upper = ((capacity - (partialSolution.getWeight())-items.get(index).getWeight())/items.get(index).getWeight()) * items.get(index).getProfit();
+                    double upper = ((capacity - (partialSolution.getWeight()-items.get(index).getWeight()))/items.get(index).getWeight()) * items.get(index).getProfit();
                     
-                    finalSolution.setProfit(partialSolution.getProfit() - items.get(index).getProfit() + upper);
+                    finalSolution.setProfit(partialSolution.getProfit() - items.get(index).getProfit() + (int)upper);
                     finalSolution.setWeight(finalSolution.getWeight());
                     finalSolution.getItems().clear();
                     finalSolution.getItems().addAll(partialSolution.getItems());
                 }
                 else{    
                     
-                    index++;
-                    
+                    while(conflict){
+                        index++;
+                        
+                        //verifica se há conflito com o novo item a ser inserido
+                        for(Item item : partialSolution.getItems()){
+                            if(A[index][partialSolution.getItems().indexOf(item)] != 1 && A[partialSolution.getItems().indexOf(item)][index] != 1){
+                               conflict = false;
+                               break;
+                            }
+                        }   
+                    }
+                                        
                     if(!partialSolution.getItems().contains(items.get(index))){ 
                         partialSolution.setProfit(partialSolution.getProfit() + items.get(index).getProfit());
                         partialSolution.setWeight(partialSolution.getWeight() + items.get(index).getWeight());
                         partialSolution.getItems().add(items.get(index));
-                        upperBound(partialSolution,finalSolution,capacity,items,index,A); 
+                        relaxedUpperBound(partialSolution,finalSolution,capacity,items,index,A); 
                     } 
                 }
             }                               
