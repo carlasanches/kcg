@@ -20,51 +20,8 @@ import java.util.logging.Logger;
 public class Main {
     
     static int bound = Integer.MIN_VALUE;
-<<<<<<< HEAD
     static List<Integer> finalSol = new ArrayList();    
     Timer timer;
-=======
-    static int solutionBound = 0;
-    static int solutionWeight = 0;
-    static List<Integer> finalSol = new ArrayList();       
-    
-    public static List<Integer> search(List<Integer> solution, List<Item> items, int index, int[][] A){
-        
-        boolean conflict = true;
-        
-        if(solutionBound > bound){
-            if((index+1) < items.size()){
-                if(solutionWeight <= 15 && solutionWeight + items.get(index+1).getWeight() > 15){
-                    bound = solutionBound;
-                    finalSol.clear();
-                    finalSol.addAll(solution);
-                }
-                else{
-                    
-                    while(conflict){
-                        index++;
-                        
-                        for(Integer i : solution){
-                            if(A[index][i] != 1 && A[i][index] != 1){
-                               conflict = false;
-                               break;
-                            }
-                        }   
-                    }
-                                        
-                    if(!solution.contains(index)){ 
-                        solutionBound += items.get(index).getProfit();
-                        solutionWeight += items.get(index).getWeight();
-                        solution.add(index);
-                        search(solution,items,index,A); 
-                    } 
-                }
-            }                               
-        }      
-        
-        return finalSol;
-    }
->>>>>>> parent of 8de4d34 (nova classe Solver)
     
     /**
     * @param args the command line arguments
@@ -99,46 +56,11 @@ public class Main {
                 Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
             }
 
-<<<<<<< HEAD
             KCG kcg = KNPCFile.format(text);   
             
             //Solution finalSolution = Solver.branchAndBound(kcg);            
             //Solution finalSolution = Solver.greedy(kcg);
             Solution finalSolution = Solver.relaxedGreedy(kcg);
-=======
-            KCG kcg = KNPCFile.format(text);    
-
-            List<Integer> solution = new ArrayList();
-            boolean conflict = false;
-
-            for(int i = 0; i < kcg.getItems().size(); i++){
-                for(Integer index : solution){
-                    if(kcg.getConflict()[index][i] == 1 && kcg.getConflict()[i][index] == 1){
-                        conflict = true;
-                        break;
-                    }
-                }
-
-                if(conflict) continue;
-
-                if(!solution.contains(i)){   
-
-                    solution.add(i);
-                    solutionBound += kcg.getItems().get(i).getProfit();
-                    solutionWeight += kcg.getItems().get(i).getWeight();
-
-                    search(solution, kcg.getItems(), i, kcg.getConflict());  
-
-                    conflict = false;
-
-                    if(solution.size() > 0){
-                        solutionBound -= kcg.getItems().get(solution.get(solution.size()-1)).getProfit();
-                        solutionWeight -= kcg.getItems().get(solution.get(solution.size()-1)).getWeight();
-                        solution.remove(solution.size()-1);                      
-                    }
-                }            
-            }
->>>>>>> parent of 8de4d34 (nova classe Solver)
 
             String totalItems = "";
 

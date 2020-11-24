@@ -15,68 +15,8 @@ import java.util.Timer;
  */
 public class KCG1 {
     
-<<<<<<< HEAD
     /*    
        
-=======
-    public static Solution greedy(Solution partialSolution, Solution solution, List<Item> items, Item item,int capacity){
-        
-        if(partialSolution.getWeight() + item.getWeight() > capacity){ //complete solution
-            
-            if(partialSolution.getProfit() > solution.getProfit()){ //upper bound
-                solution.setProfit(partialSolution.getProfit());
-            }            
-            solution = partialSolution;
-        }    
-        else{
-            if(!partialSolution.getItems().contains(item)){
-                partialSolution.getItems().add(item);
-                partialSolution.setProfit(partialSolution.getProfit() + item.getProfit());
-                partialSolution.setWeight(partialSolution.getWeight()+ item.getWeight());
-                search(partialSolution, solution, items, items.get(items.indexOf(item) + 1), capacity);
-            }                
-        }
-        
-        return solution;
-    }
-    
-    public static Solution search(Solution partialSolution, Solution solution, List<Item> items, Item item,int capacity){
-                
-        if(partialSolution.getWeight() + item.getWeight() > capacity){ //complete solution
-            
-            if(partialSolution.getProfit() > solution.getProfit()){ //upper bound
-                solution.setProfit(partialSolution.getProfit());
-                solution.setWeight(partialSolution.getWeight());
-                solution.setItems(partialSolution.getItems());
-            }
-        }    
-        else{   
-            partialSolution.getItems().add(item);
-            partialSolution.setProfit(partialSolution.getProfit() + item.getProfit());
-            partialSolution.setWeight(partialSolution.getWeight() + item.getWeight());
-            
-            search(partialSolution, solution, items, items.get(items.indexOf(item)+1), capacity);            
-        }
-        
-        return solution;
-    }
-        
-    public static void branchAndBound(List<Item> items, int capacity, Solution partialSolution){
-        
-        Solution solution = new Solution(capacity);
-        
-        //add itens restantes
-        for(Item item : items){
-            if(!solution.getItems().contains(item)){
-                solution = search(partialSolution, solution, items, item, capacity);
-            }            
-        }
-        
-        System.out.println("BB: " + solution.toString());
-        System.out.println("sol: " + solution.getItems().toString());
-    }
-    
->>>>>>> parent of 8de4d34 (nova classe Solver)
     public static double upperBound(int currentWeight, int currentValue, int k, int capacity, List<Item> items){
         int weight = currentWeight;
         int profit = currentValue;
@@ -147,7 +87,7 @@ public class KCG1 {
             }
             k++;
         }
-    }
+    }*/
     
     /**
     * @param args the command line arguments
